@@ -7,6 +7,9 @@ const App = {
 		resetBtn: document.querySelector('[data-id="reset-btn"]'),
 		newRoundBtn: document.querySelector('[data-id="new-round-btn"]'),
 		squares: document.querySelectorAll('[data-id="square"]'),
+		modal: document.querySelector('[data-id="modal"]'),
+		modalBtn: document.querySelector('[data-id="modal-btn"]'),
+		modalText: document.querySelector('[data-id="modal-text"]'),
 		winingPattern: [
 			[1, 2, 3],
 			[1, 5, 9],
@@ -92,10 +95,11 @@ const App = {
 
 		const { status, winner } = App.getGameStatus(App.state.moves);
 		if (status === "complete") {
+			App.$.modal.classList.remove("hidden");
 			if (winner) {
-				alert(`Player ${winner} wins`);
+				App.$.modalText.textContent = `Player ${winner} wins!`;
 			} else {
-				alert("Tie!");
+				App.$.modalText.textContent = "Tie game!";
 			}
 		}
 	},
@@ -116,6 +120,14 @@ const App = {
 			square.addEventListener("click", (_) => {
 				App.onSquareClick(square);
 			});
+		});
+
+		App.$.modalBtn.addEventListener("click", () => {
+			App.state.moves = [];
+			App.$.squares.forEach((square) => {
+				square.replaceChildren();
+			});
+			App.$.modal.classList.add("hidden");
 		});
 	},
 };
