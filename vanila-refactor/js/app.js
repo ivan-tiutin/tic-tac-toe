@@ -10,6 +10,7 @@ const App = {
 		modal: document.querySelector('[data-id="modal"]'),
 		modalBtn: document.querySelector('[data-id="modal-btn"]'),
 		modalText: document.querySelector('[data-id="modal-text"]'),
+		turn: document.querySelector('[data-id="turn"]'),
 		winingPattern: [
 			[1, 2, 3],
 			[1, 5, 9],
@@ -77,21 +78,29 @@ const App = {
 			App.state.moves.length === 0
 				? 1
 				: getOppositePlayer(lastMove.playerId);
+		const nextPlayer = getOppositePlayer(currentPlayer);
 
-		const icon = document.createElement("i");
+		const squareIcon = document.createElement("i");
+		const turnIcon = document.createElement("i");
+		const turnLabel = document.querySelector("p");
+		turnLabel.textContent = `Player ${nextPlayer}, you are up!`;
 
 		if (currentPlayer === 1) {
-			icon.classList.add("fa-solid", "fa-x", "yellow");
+			squareIcon.classList.add("fa-solid", "fa-x", "yellow");
+			turnIcon.classList.add("fa-solid", "fa-o", "turquoise");
 		} else {
-			icon.classList.add("fa-solid", "fa-o", "turquoise");
+			squareIcon.classList.add("fa-solid", "fa-o", "turquoise");
+			turnIcon.classList.add("fa-solid", "fa-x", "yellow");
 		}
+
+		App.$.turn.replaceChildren(turnIcon, turnLabel);
 
 		App.state.moves.push({
 			squareId: +square.id,
 			playerId: currentPlayer,
 		});
 
-		square.replaceChildren(icon);
+		square.replaceChildren(squareIcon);
 
 		const { status, winner } = App.getGameStatus(App.state.moves);
 		if (status === "complete") {
