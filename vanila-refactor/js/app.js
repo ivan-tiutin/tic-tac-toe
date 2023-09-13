@@ -88,9 +88,11 @@ const App = {
 		if (currentPlayer === 1) {
 			squareIcon.classList.add("fa-solid", "fa-x", "yellow");
 			turnIcon.classList.add("fa-solid", "fa-o", "turquoise");
+			turnLabel.classList = "turquoise";
 		} else {
 			squareIcon.classList.add("fa-solid", "fa-o", "turquoise");
 			turnIcon.classList.add("fa-solid", "fa-x", "yellow");
+			turnLabel.classList = "yellow";
 		}
 
 		App.$.turn.replaceChildren(turnIcon, turnLabel);
