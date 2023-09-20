@@ -1,4 +1,5 @@
 import View from "./view.js";
+import Store from "./store.js";
 
 const App = {
     $: {
@@ -145,8 +146,27 @@ const App = {
 
 // window.addEventListener("load", App.init);
 
+const players = [
+    {
+        id: 1,
+        name: "Player 1",
+        iconClass: "fa-x",
+        colorClass: "yellow",
+    },
+    {
+        id: 2,
+        name: "Player 2",
+        iconClass: "fa-o",
+        colorClass: "turquoise",
+    },
+];
+
 function init() {
     const view = new View();
+    const store = new Store();
+
+    console.log(store.game);
+
     view.bindGameResetEvent((event) => {
         console.log("Reset event");
         console.log(event);
@@ -157,8 +177,9 @@ function init() {
         console.log(event);
     });
 
-    view.bindPlayerMoveEvent((event) => {
-        view.setTurnIndicator(2);
+    view.bindPlayerMoveEvent((event, square) => {
+        view.setTurnIndicator(players[1]);
+        view.handlePlayerMove(square, players[0]);
     });
 }
 

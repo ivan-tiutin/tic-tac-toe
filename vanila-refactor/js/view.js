@@ -33,25 +33,27 @@ export default class View {
 
     bindPlayerMoveEvent(handler) {
         this.$$.squares.forEach((square) => {
-            square.addEventListener("click", handler);
+            square.addEventListener("click", (event) => handler(event, square));
         });
     }
 
     // DOM helper methods
 
-    // player 1 | 2
+    handlePlayerMove(squareElement, player) {
+        const icon = document.createElement("i");
+        icon.classList.add("fa-solid", player.iconClass, player.colorClass);
+        squareElement.replaceChildren(icon);
+    }
+
     setTurnIndicator(player) {
         const icon = document.createElement("i");
         const label = document.createElement("p");
-        const turn = this.$.turn;
 
-        turn.classList.add(player === 1 ? "yellow" : "turquoise");
-        turn.classList.remove(player === 1 ? "turquoise" : "yellow");
+        icon.classList.add("fa-solid", player.iconClass, player.colorClass);
+        label.classList.add(player.colorClass);
+        label.innerText = `${player.name}, you are up!`;
 
-        icon.classList.add("fa-solid", player === 1 ? "fa-x" : "fa-o");
-        label.innerText = `Player ${player}, you are up!`;
-
-        turn.replaceChildren(icon, label);
+        this.$.turn.replaceChildren(icon, label);
     }
 
     #toggleMenu() {
