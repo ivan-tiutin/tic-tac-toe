@@ -163,7 +163,7 @@ const players = [
 
 function init() {
     const view = new View();
-    const store = new Store();
+    const store = new Store(players);
 
     console.log(store.game);
 
@@ -178,8 +178,11 @@ function init() {
     });
 
     view.bindPlayerMoveEvent((event, square) => {
-        view.setTurnIndicator(players[1]);
-        view.handlePlayerMove(square, players[0]);
+        view.handlePlayerMove(square, store.game.currentPlayer);
+
+        store.playerMove(+square.id);
+
+        view.setTurnIndicator(store.game.currentPlayer);
     });
 }
 
