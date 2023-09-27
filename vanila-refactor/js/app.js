@@ -166,12 +166,19 @@ function init() {
     const store = new Store(players);
 
     view.bindGameResetEvent((event) => {
-        view.closeModal();
+        view.closeAll();
 
         store.reset();
         view.clearMoves();
 
         view.setTurnIndicator(store.game.currentPlayer);
+
+        const players = store.stats.playerWithStats;
+        view.updateScoreBoard(
+            players[0].wins,
+            players[1].wins,
+            store.stats.ties
+        );
     });
 
     view.bindNewRoundEvent((event) => {
