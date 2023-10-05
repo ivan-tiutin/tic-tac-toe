@@ -24,6 +24,30 @@ export default class View {
         });
     }
 
+    render(game, status, stats) {
+        const { playerWithStats, ties } = stats;
+        const { moves, currentPlayer } = game;
+        const { isComplete, winner } = status;
+
+        this.#closeAll();
+        this.#clearMoves();
+
+        this.#updateScoreBoard(
+            playerWithStats[0].wins,
+            playerWithStats[1].wins,
+            ties
+        );
+
+        this.#initializeMoves(moves);
+
+        if (isComplete) {
+            this.#openModal(winner ? `${winner.name} wins!` : "Tie!");
+            return;
+        }
+
+        this.#setTurnIndicator(currentPlayer);
+    }
+
     // Register all the event listeners
 
     bindGameResetEvent(handler) {
@@ -43,35 +67,47 @@ export default class View {
 
     // DOM helper methods
 
-    updateScoreBoard(p1wins, p2wins, ties) {
+    #updateScoreBoard(p1wins, p2wins, ties) {
         this.$.p1wins.innerText = `${p1wins} wins`;
         this.$.p2wins.innerText = `${p2wins} wins`;
         this.$.ties.innerText = `${ties}`;
     }
 
-    openModal(message) {
+    #openModal(message) {
         this.$.modal.classList.remove("hidden");
         this.$.modalText.innerText = message;
     }
 
-    closeAll() {
+    #closeAll() {
         this.#closeModal();
         this.#closeMenu();
     }
 
-    clearMoves() {
+    #clearMoves() {
         this.$$.squares.forEach((square) => {
             square.replaceChildren();
         });
     }
 
-    handlePlayerMove(squareElement, player) {
+    #initializeMoves(moves) {
+        this.$$.squares.forEach((square) => {
+            const existingMove = moves.find(
+                (move) => move.squareId === +square.id
+            );
+
+            if (existingMove) {
+                this.#handlePlayerMove(square, existingMove.player);
+            }
+        });
+    }
+
+    #handlePlayerMove(squareElement, player) {
         const icon = document.createElement("i");
         icon.classList.add("fa-solid", player.iconClass, player.colorClass);
         squareElement.replaceChildren(icon);
     }
 
-    setTurnIndicator(player) {
+    #setTurnIndicator(player) {
         const icon = document.createElement("i");
         const label = document.createElement("p");
 

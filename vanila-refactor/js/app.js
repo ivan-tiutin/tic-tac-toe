@@ -163,27 +163,17 @@ const players = [
 
 function init() {
     const view = new View();
-    const store = new Store(players);
+    const store = new Store("live-t3-storage-key", players);
 
     view.bindGameResetEvent((event) => {
-        view.closeAll();
-
         store.reset();
-        view.clearMoves();
-
-        view.setTurnIndicator(store.game.currentPlayer);
-
-        const players = store.stats.playerWithStats;
-        view.updateScoreBoard(
-            players[0].wins,
-            players[1].wins,
-            store.stats.ties
-        );
+        view.render(store.game, store.gameStatus, store.stats);
     });
 
     view.bindNewRoundEvent((event) => {
-        console.log("New round event");
-        console.log(event);
+        store.newRound();
+
+        view.render(store.game, store.gameStatus, store.stats);
     });
 
     view.bindPlayerMoveEvent((event, square) => {
@@ -195,19 +185,16 @@ function init() {
             return;
         }
 
-        view.handlePlayerMove(square, store.game.currentPlayer);
-
         store.playerMove(+square.id);
 
-        if (store.gameStatus.isComplete) {
-            const winner = store.gameStatus.winner;
-
-            view.openModal(winner ? `${winner.name} wins!` : "Tie!");
-            return;
-        }
-
-        view.setTurnIndicator(store.game.currentPlayer);
+        view.render(store.game, store.gameStatus, store.stats);
     });
+
+    window.addEventListener("storage", () => {
+        view.render(store.game, store.gameStatus, store.stats);
+    });
+
+    view.render(store.game, store.gameStatus, store.stats);
 }
 
 window.addEventListener("load", init);
