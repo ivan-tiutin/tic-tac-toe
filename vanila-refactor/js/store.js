@@ -6,7 +6,7 @@ const initialValue = {
     },
 };
 
-export default class Store {
+export default class Store extends EventTarget {
     #allPlayers = undefined;
     #winingPattern = [
         [1, 2, 3],
@@ -20,6 +20,7 @@ export default class Store {
     ];
 
     constructor(key, players) {
+        super();
         this.#players = players;
         this.storageKey = key;
     }
@@ -152,5 +153,6 @@ export default class Store {
         }
 
         window.localStorage.setItem(this.storageKey, JSON.stringify(newState));
+        this.dispatchEvent(new Event("statechange"));
     }
 }

@@ -167,16 +167,13 @@ function init() {
 
     view.bindGameResetEvent((event) => {
         store.reset();
-        view.render(store.game, store.gameStatus, store.stats);
     });
 
     view.bindNewRoundEvent((event) => {
         store.newRound();
-
-        view.render(store.game, store.gameStatus, store.stats);
     });
 
-    view.bindPlayerMoveEvent((event, square) => {
+    view.bindPlayerMoveEvent((square) => {
         const existingMove = store.game.moves.find(
             (move) => move.squareId === +square.id
         );
@@ -186,14 +183,19 @@ function init() {
         }
 
         store.playerMove(+square.id);
+    });
 
+    // current tab state changes
+    store.addEventListener("statechange", () => {
         view.render(store.game, store.gameStatus, store.stats);
     });
 
+    // different tab state changes
     window.addEventListener("storage", () => {
         view.render(store.game, store.gameStatus, store.stats);
     });
 
+    // the first load of the document
     view.render(store.game, store.gameStatus, store.stats);
 }
 
