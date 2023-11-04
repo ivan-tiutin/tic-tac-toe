@@ -1,4 +1,6 @@
-const initialValue = {
+import { GameState, Player } from "./types";
+
+const initialValue: GameState = {
     currentGameMoves: [],
     history: {
         currentRoundGames: [],
@@ -6,9 +8,10 @@ const initialValue = {
     },
 };
 
+type SaveStateCb = (prevState: GameState) => GameState;
+
 export default class Store extends EventTarget {
-    #allPlayers = undefined;
-    #winingPattern = [
+    private winingPattern = [
         [1, 2, 3],
         [1, 5, 9],
         [1, 4, 7],
@@ -19,16 +22,17 @@ export default class Store extends EventTarget {
         [7, 8, 9],
     ];
 
-    constructor(key, players) {
+    constructor(
+        private readonly storageKey: string,
+        private readonly players: Player[]
+    ) {
         super();
-        this.#players = players;
-        this.storageKey = key;
     }
 
     get stats() {
         const state = this.#getState();
         return {
-            playerWithStats: this.#allPlayers.map((player) => {
+            playerWithStats: this.players.map((player) => {
                 const wins = state.history.currentRoundGames.filter(
                     (game) => game.status.winner?.id === player.id
                 ).length;
@@ -48,7 +52,7 @@ export default class Store extends EventTarget {
         const state = this.#getState();
 
         const currentPlayer =
-            this.#players[state.currentGameMoves.length % this.#players.length];
+            this.players[state.currentGameMoves.length % this.players.length];
 
         return {
             moves: state.currentGameMoves,
@@ -61,7 +65,7 @@ export default class Store extends EventTarget {
 
         let winner = undefined;
 
-        for (const player of this.#players) {
+        for (const player of this.players) {
             const playerMoves = state.currentGameMoves
                 .filter((move) => move.player.id === +player.id)
                 .map((move) => move.squareId);
@@ -121,25 +125,17 @@ export default class Store extends EventTarget {
     }
 
     get #winPattern() {
-        return this.#winingPattern;
+        return this.winingPattern;
     }
 
-    get #players() {
-        return this.#allPlayers;
-    }
-
-    set #players(value) {
-        this.#allPlayers = value;
-    }
-
-    #getState() {
+    #getState(): GameState {
         const item = window.localStorage.getItem(this.storageKey);
-        return item ? JSON.parse(item) : initialValue;
+        return item ? (JSON.parse(item) as GameState) : initialValue;
     }
 
-    #saveState(stateOrFunction) {
+    #saveState(stateOrFunction: GameState | SaveStateCb) {
         const prevState = this.#getState();
-        let newState;
+        let newState: GameState;
 
         switch (typeof stateOrFunction) {
             case "function":
