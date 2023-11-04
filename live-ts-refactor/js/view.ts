@@ -1,6 +1,8 @@
+import type {} from "./types";
+
 export default class View {
-    $ = {};
-    $$ = {};
+    $: Record<string, Element> = {};
+    $$: Record<string, NodeListOf<Element>> = {};
 
     constructor() {
         this.$.menu = this.#qs('[data-id="menu"]');
@@ -62,9 +64,6 @@ export default class View {
 
     bindPlayerMoveEvent(handler) {
         this.#delegate(this.$.grid, '[data-id="square"]', "click", handler);
-        // this.$$.squares.forEach((square) => {
-        //     square.addEventListener("click", () => handler( square));
-        // });
     }
 
     // DOM helper methods
@@ -142,7 +141,7 @@ export default class View {
         icon.classList.toggle("fa-chevron-up");
     }
 
-    #qs(selector, parent) {
+    #qs(selector: string, parent?: Element) {
         const el = parent
             ? parent.querySelector(selector)
             : document.querySelector(selector);
@@ -152,7 +151,7 @@ export default class View {
         return el;
     }
 
-    #qsAll(selector) {
+    #qsAll(selector: string) {
         const elList = document.querySelectorAll(selector);
         if (!elList) {
             throw new Error("Could not find elements");
