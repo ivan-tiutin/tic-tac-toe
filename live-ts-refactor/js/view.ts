@@ -1,4 +1,4 @@
-import type { CurrentGameState, Game, GameStats, GameStatus } from "./types";
+import type { GameStatus, Move, Player } from "./types";
 import type Store from "./store";
 
 export default class View {
@@ -28,7 +28,7 @@ export default class View {
         });
     }
 
-    render(game: CurrentGameState, status: GameStatus, stats: GameStats) {
+    render(game: Store["game"], status: GameStatus, stats: Store["stats"]) {
         const { playerWithStats, ties } = stats;
         const { moves, currentPlayer } = game;
         const { isComplete, winner } = status;
@@ -54,30 +54,30 @@ export default class View {
 
     // Register all the event listeners
 
-    bindGameResetEvent(handler) {
+    bindGameResetEvent(handler: EventListener) {
         this.$.resetBtn.addEventListener("click", handler);
         this.$.modalBtn.addEventListener("click", handler);
     }
 
-    bindNewRoundEvent(handler) {
+    bindNewRoundEvent(handler: EventListener) {
         this.$.newRoundBtn.addEventListener("click", handler);
     }
 
-    bindPlayerMoveEvent(handler) {
+    bindPlayerMoveEvent(handler: (el: Element) => void) {
         this.#delegate(this.$.grid, '[data-id="square"]', "click", handler);
     }
 
     // DOM helper methods
 
-    #updateScoreBoard(p1wins, p2wins, ties) {
-        this.$.p1wins.innerText = `${p1wins} wins`;
-        this.$.p2wins.innerText = `${p2wins} wins`;
-        this.$.ties.innerText = `${ties}`;
+    #updateScoreBoard(p1wins: number, p2wins: number, ties: number) {
+        this.$.p1wins.textContent = `${p1wins} wins`;
+        this.$.p2wins.textContent = `${p2wins} wins`;
+        this.$.ties.textContent = `${ties}`;
     }
 
-    #openModal(message) {
+    #openModal(message: string) {
         this.$.modal.classList.remove("hidden");
-        this.$.modalText.innerText = message;
+        this.$.modalText.textContent = message;
     }
 
     #closeAll() {
@@ -91,7 +91,7 @@ export default class View {
         });
     }
 
-    #initializeMoves(moves) {
+    #initializeMoves(moves: Move[]) {
         this.$$.squares.forEach((square) => {
             const existingMove = moves.find(
                 (move) => move.squareId === +square.id
@@ -103,13 +103,13 @@ export default class View {
         });
     }
 
-    #handlePlayerMove(squareElement, player) {
+    #handlePlayerMove(squareElement: Element, player: Player) {
         const icon = document.createElement("i");
         icon.classList.add("fa-solid", player.iconClass, player.colorClass);
         squareElement.replaceChildren(icon);
     }
 
-    #setTurnIndicator(player) {
+    #setTurnIndicator(player: Player) {
         const icon = document.createElement("i");
         const label = document.createElement("p");
 
@@ -160,8 +160,17 @@ export default class View {
         return elList;
     }
 
-    #delegate(el, selector, eventKey, handler) {
+    #delegate(
+        el: Element,
+        selector: string,
+        eventKey: string,
+        handler: (el: Element) => void
+    ) {
         el.addEventListener(eventKey, (event) => {
+            if (!(event.target instanceof Element)) {
+                throw new Error("Event target not found!");
+            }
+
             if (event.target.matches(selector)) {
                 handler(event.target);
             }

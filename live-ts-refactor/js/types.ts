@@ -22,7 +22,7 @@ export type Game = {
 
 export type CurrentGameState = {
     moves: Move[];
-    currentPlayer: Player
+    currentPlayer: Player;
 };
 
 export type GameState = {
@@ -33,7 +33,7 @@ export type GameState = {
     };
 };
 
-export type PlayerWithStats {
+export type PlayerWithStats = {
     wins: number;
     id: number;
     name: string;
@@ -41,7 +41,7 @@ export type PlayerWithStats {
     colorClass: string;
 };
 
-export type GameStats {
+export type GameStats = {
     playerWithStats: PlayerWithStats[];
     ties: number;
-}
+};

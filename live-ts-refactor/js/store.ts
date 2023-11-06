@@ -1,4 +1,10 @@
-import { GameState, GameStats, GameStatus, Player } from "./types";
+import {
+    CurrentGameState,
+    GameState,
+    GameStats,
+    GameStatus,
+    Player,
+} from "./types";
 
 const initialValue: GameState = {
     currentGameMoves: [],
@@ -48,7 +54,7 @@ export default class Store extends EventTarget {
         };
     }
 
-    get game() {
+    get game(): CurrentGameState {
         const state = this.#getState();
 
         const currentPlayer =
