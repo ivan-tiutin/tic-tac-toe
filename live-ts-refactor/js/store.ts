@@ -1,4 +1,4 @@
-import { GameState, Player } from "./types";
+import { GameState, GameStats, GameStatus, Player } from "./types";
 
 const initialValue: GameState = {
     currentGameMoves: [],
@@ -29,7 +29,7 @@ export default class Store extends EventTarget {
         super();
     }
 
-    get stats() {
+    get stats(): GameStats {
         const state = this.#getState();
         return {
             playerWithStats: this.players.map((player) => {
@@ -60,7 +60,7 @@ export default class Store extends EventTarget {
         };
     }
 
-    get gameStatus() {
+    get gameStatus(): GameStatus {
         const state = this.#getState();
 
         let winner = undefined;
@@ -84,7 +84,7 @@ export default class Store extends EventTarget {
         };
     }
 
-    playerMove(squareId) {
+    playerMove(squareId: number): void {
         const stateClone = structuredClone(this.#getState());
         stateClone.currentGameMoves.push({
             squareId,
@@ -94,7 +94,7 @@ export default class Store extends EventTarget {
         this.#saveState(stateClone);
     }
 
-    reset() {
+    reset(): void {
         const stateClone = structuredClone(this.#getState());
         const { moves } = this.game;
         const status = this.gameStatus;
