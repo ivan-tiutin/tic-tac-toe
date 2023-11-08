@@ -1,7 +1,7 @@
 import {
-    CurrentGameState,
+    DerivedGame,
     GameState,
-    GameStats,
+    DerivedStats,
     GameStatus,
     Player,
 } from "./types";
@@ -35,7 +35,7 @@ export default class Store extends EventTarget {
         super();
     }
 
-    get stats(): GameStats {
+    get stats(): DerivedStats {
         const state = this.#getState();
         return {
             playerWithStats: this.players.map((player) => {
@@ -54,7 +54,7 @@ export default class Store extends EventTarget {
         };
     }
 
-    get game(): CurrentGameState {
+    get game(): DerivedGame {
         const state = this.#getState();
 
         const currentPlayer =

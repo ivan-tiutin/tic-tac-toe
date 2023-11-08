@@ -1,5 +1,10 @@
-import type { GameStatus, Move, Player } from "./types";
-import type Store from "./store";
+import type {
+    DerivedGame,
+    DerivedStats,
+    GameStatus,
+    Move,
+    Player,
+} from "./types";
 
 export default class View {
     $: Record<string, Element> = {};
@@ -28,7 +33,7 @@ export default class View {
         });
     }
 
-    render(game: Store["game"], status: GameStatus, stats: Store["stats"]) {
+    render(game: DerivedGame, status: GameStatus, stats: DerivedStats) {
         const { playerWithStats, ties } = stats;
         const { moves, currentPlayer } = game;
         const { isComplete, winner } = status;

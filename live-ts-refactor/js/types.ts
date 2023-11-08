@@ -12,7 +12,7 @@ export type Move = {
 
 export type GameStatus = {
     isComplete: boolean;
-    winner?: Player;
+    winner: Player | undefined;
 };
 
 export type Game = {
@@ -20,7 +20,7 @@ export type Game = {
     status: GameStatus;
 };
 
-export type CurrentGameState = {
+export type DerivedGame = {
     moves: Move[];
     currentPlayer: Player;
 };
@@ -33,15 +33,9 @@ export type GameState = {
     };
 };
 
-export type PlayerWithStats = {
-    wins: number;
-    id: number;
-    name: string;
-    iconClass: string;
-    colorClass: string;
-};
+export type PlayerWithWins = Player & { wins: number };
 
-export type GameStats = {
-    playerWithStats: PlayerWithStats[];
+export type DerivedStats = {
+    playerWithStats: PlayerWithWins[];
     ties: number;
 };
