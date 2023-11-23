@@ -1,5 +1,11 @@
 import "./App.css";
+import Footer from "./components/Footer";
+import Menu from "./components/Menu";
+import Modal from "./components/Modal";
+
 export default function App() {
+    const showModal = false;
+
     return (
         <>
             <main>
@@ -9,66 +15,15 @@ export default function App() {
                         <p className="turquoise">Player 1, you're up!</p>
                     </div>
 
-                    <div className="menu" data-id="menu">
-                        <button className="menu-btn" data-id="menu-btn">
-                            Action
-                            <i className="fa-solid fa-chevron-down"></i>
-                        </button>
+                    <Menu />
 
-                        <div
-                            className="items border hidden"
-                            data-id="menu-items"
-                        >
-                            <button data-id="reset-btn">Reset</button>
-                            <button data-id="new-round-btn">New Round</button>
-                        </div>
-                    </div>
-
-                    <div
-                        id="1"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="2"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="3"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="4"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="5"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="6"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="7"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="8"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
-                    <div
-                        id="9"
-                        className="square shadow"
-                        data-id="square"
-                    ></div>
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((squareId) => {
+                        return (
+                            <div key={squareId} className="square shadow">
+                                <i className="fa-solid fa-x turquoise" />
+                            </div>
+                        );
+                    })}
 
                     <div
                         className="score shadow"
@@ -94,17 +49,8 @@ export default function App() {
                 </div>
             </main>
 
-            <footer>
-                <p>Original project by Ivan Tiutin and others</p>
-                <p>Refactored by Ivan Tiutin</p>
-            </footer>
-
-            <div className="modal hidden" data-id="modal">
-                <div className="modal-content">
-                    <p data-id="modal-text">Player 1 wins!</p>
-                    <button data-id="modal-btn">Play again</button>
-                </div>
-            </div>
+            <Footer />
+            {showModal && <Modal message="Player 1 wins!" />}
         </>
     );
 }

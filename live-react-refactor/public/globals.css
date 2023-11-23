@@ -200,21 +200,6 @@ button:hover {
     cursor: pointer;
 }
 
-/* footer styling */
-footer {
-    color: white;
-    margin-top: 50px;
-}
-
-footer p {
-    margin-top: 10px;
-    text-align: center;
-}
-
-footer a {
-    color: var(--yellow);
-}
-
 .modal {
     display: flex;
     justify-content: center;
