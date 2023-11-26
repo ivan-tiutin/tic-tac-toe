@@ -1,1 +1,36 @@
+.turn i {
+    font-size: 1.8rem;
+    margin-left: 10px;
+    animation: 0.6s ease-in-out turn-icon-animation;
+}
 
+.turn p {
+    font-size: 14px;
+    animation: 0.6s ease-in-out turn-text-animation;
+}
+
+@keyframes turn-icon-animation {
+    0% {
+        transform: scale(0);
+    }
+
+    25% {
+        transform: scale(1.4);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes turn-text-animation {
+    0% {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    100% {
+        opacity: 100;
+        transform: translateX(0);
+    }
+}
